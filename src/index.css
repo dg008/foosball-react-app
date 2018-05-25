@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* Bootstrap styles */
+.row {
+  margin-top: 4px;
+}
+
+.control-label {
+  float: right;
+}
+
+.left {
+  float: left;
+}
+
+.top-spacer {
+  margin-top: 10px;
+}
