@@ -4,7 +4,6 @@ import { PropTypes } from 'prop-types';
 import _ from 'lodash';
 import { winRatesCalculator } from '../../Services';
 import BarChart from '../BarChart';
-import { config } from '../../Config'
 
 /**
  * This component is responsible for displaying the overall win rates for
@@ -41,7 +40,7 @@ class WinRatesResult extends Component {
             const { overallWinRate } = calculatedResult;
             resultsByTime.push(
                 {
-                    title: new Date(r.matchDateTime).toLocaleString(config.LOCALE),
+                    title: new Date(r.matchDateTime).toLocaleString(process.env.REACT_APP_LOCALE),
                     value: isNaN(overallWinRate) ? 0.00 : overallWinRate,
                 }
             );
