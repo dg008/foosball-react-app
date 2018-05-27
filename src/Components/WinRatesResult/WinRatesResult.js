@@ -50,13 +50,13 @@ class WinRatesResult extends Component {
             firstParticipant,
             resultsByTime,
             numGamesWith2ndParticipant,
-            overallWinRate,
+            overallWinRate: overallWinRate.toFixed(2),
             overallWinLossRate: isNaN(overallWinRate)
                 ? 'N/A (Participant may not be entered/found)'
-                : `${overallWinRate}% (WIN) / ${overallLossRate}% (LOSS)`,
+                : `${overallWinRate.toFixed(2)}% (WIN) / ${overallLossRate.toFixed(2)}% (LOSS)`,
             specificWinLossRate: isNaN(specificWinRate)
                 ? 'N/A (Participant may not be entered/found)'
-                : `${specificWinRate }% (WIN) / ${specificLossRate}% (LOSS)`,
+                : `${specificWinRate.toFixed(2)}% (WIN) / ${specificLossRate.toFixed(2)}% (LOSS)`,
           };
     }
     render() {

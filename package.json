@@ -20,7 +20,16 @@
     "react-d3-basic": "^1.6.11",
     "react-dom": "^16.3.2",
     "react-scripts": "1.1.4",
-    "react-validation": "^3.0.7"
+    "react-validation": "^3.0.7",
+    "watchman": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.1.10",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "react-addons-test-utils": "^15.6.2",
+    "react-scripts-ts": "^2.16.0",
+    "react-test-renderer": "^16.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
