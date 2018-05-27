@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Grid, Row, Col, FormControl, ControlLabel } from 'react-bootstrap';
 import { PropTypes } from 'prop-types';
 import _ from 'lodash';
-import { winRatesCalculator } from '../../Services';
+import calculator from 'winrates-calculator';
 import BarChart from '../BarChart';
 
 /**
@@ -18,8 +18,8 @@ class WinRatesResult extends Component {
             specificWinLossRate: '',
         }
     }
-    static getDerivedStateFromProps(nextProps, prevState) {
-        const { firstParticipant, secondParticipant } = nextProps;
+    loadWinRates = async (prevProps) => {
+        const { firstParticipant, secondParticipant } = this.props;
 
         // Get overall win rates
         const matchResults = [];
@@ -30,13 +30,13 @@ class WinRatesResult extends Component {
                 matchResults.push(matchResult);
             }
         }
-        const summaryWinRates = winRatesCalculator({ firstParticipant, secondParticipant, matchResults } );
+        const summaryWinRates = await calculator({ firstParticipant, secondParticipant, matchResults } );
         const { numGamesWith2ndParticipant, overallWinRate, overallLossRate,
             specificWinRate, specificLossRate} = summaryWinRates;
 
         const resultsByTime = [];
-        matchResults.forEach(r => {
-            const calculatedResult = winRatesCalculator({firstParticipant, secondParticipant, matchResults: [r]});
+        matchResults.forEach(async r => {
+            const calculatedResult = await calculator({firstParticipant, secondParticipant, matchResults: [r]});
             const { overallWinRate } = calculatedResult;
             resultsByTime.push(
                 {
@@ -46,19 +46,30 @@ class WinRatesResult extends Component {
             );
         });
         
-        return {
-            firstParticipant,
-            resultsByTime,
-            numGamesWith2ndParticipant,
-            overallWinRate: overallWinRate.toFixed(2),
-            overallWinLossRate: isNaN(overallWinRate)
-                ? 'N/A (Participant may not be entered/found)'
-                : `${overallWinRate.toFixed(2)}% (WIN) / ${overallLossRate.toFixed(2)}% (LOSS)`,
-            specificWinLossRate: isNaN(specificWinRate)
-                ? 'N/A (Participant may not be entered/found)'
-                : `${specificWinRate.toFixed(2)}% (WIN) / ${specificLossRate.toFixed(2)}% (LOSS)`,
-          };
+        if(prevProps == null ||
+            (prevProps.firstParticipant !== this.props.firstParticipant
+            || prevProps.secondParticipant !== this.props.secondParticipant)) {
+
+            this.setState({
+                firstParticipant,
+                resultsByTime,
+                numGamesWith2ndParticipant,
+                overallWinRate,
+                overallWinLossRate: isNaN(overallWinRate)
+                    ? 'N/A (Participant may not be entered/found)'
+                    : `${overallWinRate.toFixed(2)}% (WIN) / ${overallLossRate.toFixed(2)}% (LOSS)`,
+                specificWinLossRate: isNaN(specificWinRate)
+                    ? 'N/A (Participant may not be entered/found)'
+                    : `${specificWinRate.toFixed(2)}% (WIN) / ${specificLossRate.toFixed(2)}% (LOSS)`,
+            });
+        }
     }
+    componentDidMount() {
+        this.loadWinRates();
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.loadWinRates(prevProps);
+    }    
     render() {
         const { firstParticipant, overallWinRate, numGamesWith2ndParticipant, resultsByTime } = this.state;
         return (
